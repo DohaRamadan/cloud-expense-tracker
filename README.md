@@ -3,7 +3,7 @@ Expense Tracker is a microservices-based application that allows users to manage
 
 ## Tools Used
 - Spring Boot: Microservices are implemented using Spring Boot, providing a robust and scalable backend.
-- MongoDB and PostgreSQL: MongoDB is used for storing user-specific data, while PostgreSQL is utilized for financial data storage.
+- MongoDB and PostgreSQL: PostgreSQL is used for storing user-specific data, while MongoDB is utilized for expenses storage.
 - Docker: Containerization is employed for seamless deployment and scaling of microservices.
 - Postman: The API endpoints are documented and can be tested using Postman.
 
@@ -50,8 +50,8 @@ cd <your_project_directory>
 - Run the Docker Compose:
 ```
 cd gateway
-docker-compose build
-docker-compose up
+docker-compose up --build -d
+
 ```
 - Access the Services:
   - Gateway Service: http://localhost:8080
