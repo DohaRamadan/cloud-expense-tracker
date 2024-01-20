@@ -6,10 +6,18 @@ spring:
           uri: http://user-service:8001
           predicates:
             - Path=/api/users/**
+          filters:
+            - name: AuthenticationFilter
+              args:
+                config:
         - id: expense-service-route
           uri: http://expense-service:8000
           predicates:
             - Path=/api/expense/**
+          filters:
+            - name: AuthenticationFilter
+              args:
+                config:
       default-filters:
         - name: AuthenticationFilter
           args:

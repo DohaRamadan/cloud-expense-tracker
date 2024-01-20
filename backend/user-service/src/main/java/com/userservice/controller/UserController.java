@@ -9,6 +9,7 @@ import com.userservice.Repository.UserRepository;
 import com.userservice.dto.JwtResponse;
 import com.userservice.dto.LoginDto;
 import com.userservice.dto.MessageResponse;
+import com.userservice.model.Role;
 import com.userservice.model.User;
 import com.userservice.security.jwt.JwtUtils;
 import com.userservice.service.TokenBlacklist;
@@ -64,10 +65,16 @@ public class UserController {
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
         }
+        Role role = roleRepository.findRoleByName("USER");
+        if(role == null){
+            role = new Role();
+            role.setName("USER");
+            roleRepository.save(role);
+        }
         User user = User.builder().username(userRequest.getUsername())
                 .email(userRequest.getEmail())
                 .password(encoder.encode(userRequest.getPassword()))
-                .roles(Collections.singleton(roleRepository.findRoleByName("USER")))
+                .roles(Collections.singleton(role))
                 .build();
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
