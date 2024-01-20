@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  gateway:
+    image: gateway-image
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-service
+      - expense-service
+
+  user-service:
+    image: user-service-image  # Use the image name you specified in your Dockerfile
+    ports:
+      - "8001:8001"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/expense_tracker
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 161112
+      SPRING_JPA_HIBERNATE_DDL-AUTO: update
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      COM_USERSERVICE_JWTSECRET: "======================BezKoder=Spring==========================="
+      COM_USERSERVICE_JWTEXPIRATIONMS: 86400000
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: expense_tracker
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 161112
+
+  expense-service:
+    image: expense-service-image
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/expense_tracker
+      SERVER_PORT: 8000
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+volumes:
+  mongodb_data:
